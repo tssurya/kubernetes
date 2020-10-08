@@ -168,6 +168,12 @@ type KubeProxyConfiguration struct {
 	ShowHiddenMetricsForVersion string
 	// DetectLocalMode determines mode to use for detecting local traffic, defaults to LocalModeClusterCIDR
 	DetectLocalMode LocalMode
+	// InterfacePrefix is a string argument which represents the interface prefix name of the pods in the node.
+	// This could be an iface prefix name where all pod interfaces start with same prefix, or a bridge name, or
+	// a single interface name. Kube-proxy considers traffic as local if originating from an interface or a
+	// bridge which matches the given prefix. This argument should be set if DetectLocateMode is set to
+	// LocalModeInterface.
+	InterfacePrefix string
 }
 
 // Currently, three modes of proxy are available in Linux platform: 'userspace' (older, going to be EOL), 'iptables'
@@ -199,6 +205,7 @@ type LocalMode string
 const (
 	LocalModeClusterCIDR LocalMode = "ClusterCIDR"
 	LocalModeNodeCIDR    LocalMode = "NodeCIDR"
+	LocalModeInterface   LocalMode = "Interface"
 )
 
 // IPVSSchedulerMethod is the algorithm for allocating TCP connections and
